@@ -1,0 +1,25 @@
+<?php
+
+/** @var array $news */
+$news;
+
+?>
+<ul>
+    <form method="GET">
+        <label for="minWatchCount">Мінімальна кількість переглядів</label>
+        <input value="<?php echo $_GET['minWatchCount'] ?? 0 ?>" id="minWatchCount" name="minWatchCount" type="number"><br />
+
+        <button type="submit">Add</button>
+    </form>
+    <?php foreach ($news as $newsExemplar) : ?>
+        <li>
+            <h3>Новина номер <?= $newsExemplar['code']; ?></h3>
+        </li>
+        <li><?= $newsExemplar['title']; ?></li>
+        <li><?= $newsExemplar['description']; ?></li>
+        <li><?= $newsExemplar['text']; ?></li>
+        <li><?= $newsExemplar['date']; ?></li>
+        <li><?= $newsExemplar['watchCount']; ?></li>
+    <?php endforeach; ?>
+
+</ul>
