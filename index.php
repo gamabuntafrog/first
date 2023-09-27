@@ -9,50 +9,23 @@ function echoAlert($text)
     echo "<script type=\"text/javascript\">alert(\"$text\");</script>";
 }
 
+function saveNews($news) {
+    $jsonData = json_encode($news);
+
+    $filePath = 'news.json';
+
+    file_put_contents($filePath, $jsonData);
+
+    echoAlert("News saved!");
+}
+
 $currentDate = date('Y-m-d');
 
-$news = [
-    [
-        'code' => 1,
-        'title' => "Новина 1",
-        'description' => "Опис новини 1",
-        'text' => "Текст новини 1",
-        'date' => date('Y-m-d', strtotime($currentDate . rand(-100, -1))),
-        'watchCount' => rand(1, 100),
-    ],
-    [
-        'code' => 2,
-        'title' => "Новина 2",
-        'description' => "Опис новини 2",
-        'text' => "Текст новини 2",
-        'date' => date('Y-m-d', strtotime($currentDate . rand(-100, -1))),
-        'watchCount' => rand(1, 100),
-    ],
-    [
-        'code' => 3,
-        'title' => "Новина 1",
-        'description' => "Опис новини 3",
-        'text' => "Текст новини 3",
-        'date' => date('Y-m-d', strtotime($currentDate . rand(-100, -1))),
-        'watchCount' => rand(1, 100),
-    ],
-    [
-        'code' => 4,
-        'title' => "Новина 4",
-        'description' => "Опис новини 4",
-        'text' => "Текст новини 4",
-        'date' => date('Y-m-d', strtotime($currentDate . rand(-100, -1))),
-        'watchCount' => rand(1, 100),
-    ],
-    [
-        'code' => 5,
-        'title' => "Новина 5",
-        'description' => "Опис новини 5",
-        'text' => "Текст новини 5",
-        'date' => date('Y-m-d', strtotime($currentDate . rand(-100, -1))),
-        'watchCount' => rand(1, 100),
-    ],
-];
+$readData = file_get_contents('news.json');
+
+if ($readData) {
+    $news = json_decode($readData, true);
+}
 
 if (isset($_POST['createNews'])) {
     $news[] = [
@@ -63,6 +36,8 @@ if (isset($_POST['createNews'])) {
         'date' => date("Y-m-d"),
         'watchCount' => rand(1, 100),
     ];
+
+    saveNews($news);
 }
 
 if (isset($_POST['editNews'])) {
@@ -83,6 +58,8 @@ if (isset($_POST['editNews'])) {
 
     if (!$wasFound) {
         echoAlert("News not found");
+    } else {
+        saveNews($news);
     }
 }
 
@@ -111,6 +88,7 @@ $news = array_filter($news, function ($element) {
 
     return $return_flag;
 });
+
 
 include 'templates/news_table.phtml';
 include 'templates/news_create.phtml';
